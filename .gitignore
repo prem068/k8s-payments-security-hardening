@@ -1,0 +1,5 @@
+*.tar.gz
+kubeseal
+__pycache__/
+*.pyc
+.DS_Store

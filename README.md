@@ -50,12 +50,11 @@ controller holding the matching private key — you'll need your own controller
 installed (`helm install sealed-secrets sealed-secrets/sealed-secrets -n kube-system`)
 and your own sealed secret if reproducing this from scratch.
 
-## What I'd add with more time
+## Remaining Improvements
 
-- Ingress with TLS
-- Kyverno/OPA admission policies rejecting root containers and `:latest` tags
-- Pod Security Standards enforcement at the namespace level
-- Signed, pinned image (Cosign) instead of a mutable tag
+- Signed and digest-pinned images using Cosign
+- TLS termination at the Ingress
+- Further workload identity/RBAC personas if required
 
 ## Admission control & runtime enforcement (Task 1, continued)
 

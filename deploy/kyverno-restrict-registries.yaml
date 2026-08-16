@@ -1,0 +1,20 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-registries
+spec:
+  validationFailureAction: Enforce
+  background: true
+  rules:
+    - name: allowed-registries
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Images must come from an approved registry (ghcr.io/prem068 or curlimages)"
+        pattern:
+          spec:
+            containers:
+              - image: "ghcr.io/prem068/* | curlimages/*"

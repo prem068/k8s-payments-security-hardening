@@ -56,3 +56,11 @@ and your own sealed secret if reproducing this from scratch.
 - Kyverno/OPA admission policies rejecting root containers and `:latest` tags
 - Pod Security Standards enforcement at the namespace level
 - Signed, pinned image (Cosign) instead of a mutable tag
+
+## Admission control & runtime enforcement (Task 1, continued)
+
+- **Ingress**: ingress-nginx, verified end-to-end via port-forward and Host header routing to the hardened pods.
+- **Kyverno**: three ClusterPolicy resources enforce no root containers, no latest tags, and images restricted to an approved registry. Verified live by attempting to apply the original insecure manifest with plaintext secrets and a root container. Kyverno's admission webhook rejected it outright, citing both violated policies. See deploy/kyverno-rejection-proof.txt.
+- **Pod Security Standards**: the payments namespace enforces the restricted profile at the Kubernetes API level. Proven by deleting the neighbour reporting pod, deliberately left unhardened to match the original assignment. Its ReplicaSet could not recreate it, failing PSS validation on every attempt. See deploy/pss-enforcement-proof.txt. ledger-api, already built to restricted-level security, was unaffected.
+
+This two-layer approach of Kyverno plus native PSS demonstrates defense-in-depth: even if one admission control were misconfigured or bypassed, the other still blocks non-compliant workloads.
